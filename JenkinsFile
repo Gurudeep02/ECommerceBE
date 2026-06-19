@@ -1,119 +1,145 @@
 pipeline {
-agent any
+    agent any
 
-```
-tools {
-    maven 'Maven3'
-    jdk 'JDK21'
-}
-
-environment {
-    DOCKER_USER = "gurudeep02"
-}
-
-stages {
-
-    stage('Checkout') {
-        steps {
-            checkout scm
-        }
+    tools {
+        maven 'Maven3'
+        jdk 'JDK21'
     }
 
-    stage('Detect Changes') {
-        steps {
-            script {
+    environment {
+        DOCKER_USER = 'gurudeep02'
+    }
 
-                CHANGED_FILES = sh(
-                    script: "git diff --name-only HEAD~1 HEAD",
-                    returnStdout: true
-                ).trim()
+    stages {
 
-                echo "Changed Files:"
-                echo CHANGED_FILES
-
-                SERVICES = []
-
-                if (CHANGED_FILES.contains("api-gateway/")) {
-                    SERVICES.add("api-gateway")
-                }
-
-                if (CHANGED_FILES.contains("order-service/")) {
-                    SERVICES.add("order-service")
-                }
-
-                if (CHANGED_FILES.contains("product-service/")) {
-                    SERVICES.add("product-service")
-                }
-
-                if (CHANGED_FILES.contains("inventory-service/")) {
-                    SERVICES.add("inventory-service")
-                }
-
-                if (CHANGED_FILES.contains("notification-service/")) {
-                    SERVICES.add("notification-service")
-                }
-
-                env.CHANGED_SERVICES = SERVICES.join(",")
+        stage('Checkout') {
+            steps {
+                checkout scm
             }
         }
-    }
 
-    stage('Build Changed Services') {
-        steps {
+        stage('Detect Changed Services') {
+            steps {
+                script {
 
-            script {
+                    def changedFiles = bat(
+                        script: '@git diff --name-only HEAD~1 HEAD',
+                        returnStdout: true
+                    ).trim()
 
-                def services = env.CHANGED_SERVICES.split(",")
+                    echo "Changed Files:"
+                    echo changedFiles
 
-                for(service in services) {
+                    def services = []
 
-                    if(service?.trim()) {
+                    if (changedFiles.contains('api-gateway/')) {
+                        services.add('api-gateway')
+                    }
 
-                        dir(service) {
+                    if (changedFiles.contains('order-service/')) {
+                        services.add('order-service')
+                    }
 
-                            sh "mvn clean package -DskipTests"
+                    if (changedFiles.contains('product-service/')) {
+                        services.add('product-service')
+                    }
 
-                            sh """
-                            docker build \
-                            -t ${DOCKER_USER}/${service}:latest .
-                            """
+                    if (changedFiles.contains('inventory-service/')) {
+                        services.add('inventory-service')
+                    }
 
+                    if (changedFiles.contains('notification-service/')) {
+                        services.add('notification-service')
+                    }
+
+                    env.CHANGED_SERVICES = services.join(',')
+
+                    echo "Services to build: ${env.CHANGED_SERVICES}"
+                }
+            }
+        }
+
+        stage('Build & Package') {
+            when {
+                expression { env.CHANGED_SERVICES?.trim() }
+            }
+            steps {
+                script {
+
+                    def services = env.CHANGED_SERVICES.split(',')
+
+                    for (service in services) {
+
+                        if (service.trim()) {
+
+                            dir(service) {
+
+                                bat 'mvn clean package -DskipTests'
+
+                                bat """
+                                docker build -t %DOCKER_USER%/${service}:latest .
+                                """
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    stage('Push Images') {
-        steps {
+        stage('Docker Login & Push') {
+            when {
+                expression { env.CHANGED_SERVICES?.trim() }
+            }
+            steps {
 
-            withCredentials([
-                usernamePassword(
-                    credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'DOCKER_USERNAME',
-                    passwordVariable: 'DOCKER_PASSWORD'
-                )
-            ]) {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKER_USERNAME',
+                        passwordVariable: 'DOCKER_PASSWORD'
+                    )
+                ]) {
+
+                    script {
+
+                        bat '''
+                        echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
+                        '''
+
+                        def services = env.CHANGED_SERVICES.split(',')
+
+                        for (service in services) {
+
+                            if (service.trim()) {
+
+                                bat """
+                                docker push %DOCKER_USER%/${service}:latest
+                                """
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Restart Containers') {
+            when {
+                expression { env.CHANGED_SERVICES?.trim() }
+            }
+            steps {
 
                 script {
 
-                    sh '''
-                    echo $DOCKER_PASSWORD | docker login \
-                    -u $DOCKER_USERNAME \
-                    --password-stdin
-                    '''
+                    def services = env.CHANGED_SERVICES.split(',')
 
-                    def services =
-                        env.CHANGED_SERVICES.split(",")
+                    for (service in services) {
 
-                    for(service in services) {
+                        if (service.trim()) {
 
-                        if(service?.trim()) {
-
-                            sh """
-                            docker push \
-                            ${DOCKER_USER}/${service}:latest
+                            bat """
+                            docker compose stop ${service}
+                            docker compose rm -f ${service}
+                            docker compose up -d ${service}
                             """
                         }
                     }
@@ -122,30 +148,13 @@ stages {
         }
     }
 
-    stage('Restart Containers') {
+    post {
+        success {
+            echo 'Pipeline completed successfully'
+        }
 
-        steps {
-
-            script {
-
-                def services =
-                    env.CHANGED_SERVICES.split(",")
-
-                for(service in services) {
-
-                    if(service?.trim()) {
-
-                        sh """
-                        docker compose stop ${service} || true
-                        docker compose rm -f ${service} || true
-                        docker compose up -d ${service}
-                        """
-                    }
-                }
-            }
+        failure {
+            echo 'Pipeline failed'
         }
     }
-}
-```
-
 }
