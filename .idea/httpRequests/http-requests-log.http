@@ -1,0 +1,640 @@
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 101
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "6",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "22",
+  "status": "wdf"
+}
+
+<> 2026-06-18T192150.200.json
+
+###
+
+POST http://localhost:9095/auth/login
+Content-Type: application/json
+Content-Length: 55
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "username": "gurudeep",
+  "password": "Guru@2002"
+}
+
+<> 2026-06-18T190949.200.json
+
+###
+
+POST http://localhost:9095/auth/login
+Content-Type: application/json
+Content-Length: 55
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "username": "gurudeep",
+  "password": "Guru@2002"
+}
+
+<> 2026-06-18T190831.200.json
+
+###
+
+POST http://localhost:9095/auth/login
+Content-Type: application/json
+Content-Length: 55
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "username": "gurudeep",
+  "password": "Guru@2002"
+}
+
+<> 2026-06-18T190535.500.json
+
+###
+
+POST http://localhost:9095/auth/login
+Content-Type: application/json
+Content-Length: 55
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "username": "gurudeep",
+  "password": "Guru@2002"
+}
+
+###
+
+POST http://localhost:9095/auth/login
+Content-Type: application/json
+Content-Length: 55
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "username": "gurudeep",
+  "password": "Guru@2002"
+}
+
+###
+
+POST http://localhost:9095/auth/register
+Content-Type: application/json
+Content-Length: 77
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "username": "gurudeep",
+  "email": "df@g.in",
+  "password": "Guru@2002"
+}
+
+<> 2026-06-18T190012.200.txt
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 101
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "5",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "12",
+  "status": "jkl"
+}
+
+<> 2026-06-18T153855.200.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 101
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "5",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "12",
+  "status": "jkl"
+}
+
+<> 2026-06-18T125725.500.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 101
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "5",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "12",
+  "status": "jkl"
+}
+
+<> 2026-06-18T125314.500.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 101
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "5",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "12",
+  "status": "jkl"
+}
+
+<> 2026-06-18T124824.500.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 101
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "5",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "12",
+  "status": "jkl"
+}
+
+<> 2026-06-18T124723.500.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 101
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "5",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "12",
+  "status": "jkl"
+}
+
+<> 2026-06-18T124119.500.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "3",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "45",
+  "status": "fghjk"
+
+}
+
+<> 2026-06-17T214511.200.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 100
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "22",
+  "status": "df"
+}
+
+<> 2026-06-17T210150.200.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 100
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "22",
+  "status": "df"
+}
+
+<> 2026-06-17T201110.200.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 100
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "22",
+  "status": "df"
+}
+
+<> 2026-06-17T165039.200.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 100
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "22",
+  "status": "df"
+}
+
+<> 2026-06-17T160941.200.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 100
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "22",
+  "status": "df"
+}
+
+<> 2026-06-17T160819.500.json
+
+###
+
+POST http://localhost:9093/orders
+Content-Type: application/json
+Content-Length: 100
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "1",
+  "totalAmount": "22",
+  "status": "df"
+}
+
+<> 2026-06-17T154258.500.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T195014.200.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T194936.500.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T194914.500.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T194500.500.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T194305.200.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T193733.500.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T193427.500.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T193356.500.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T193251.500.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/json
+Content-Length: 104
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "orderId": "1",
+  "productId": "1",
+  "quantity": "2",
+  "totalAmount": "1500",
+  "status": "paid"
+}
+
+<> 2026-06-16T192930.500.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 190
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+%7B%0A++++%22orderId%22+%3A+%221%22%2C%0A++++%22productId%22%3A+%221%22%2C%0A++++%22quantity%22%3A+%222%22%3B%0A++++%22totalAmount%22%3A+%221500%22%2C%0A++++%22status%22%3A+%22PAid%22%0A%7D=
+
+<> 2026-06-16T192820.415.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 160
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+%7B%0A++++orderId+%3A+%221%22%2C%0A++++productId%3A+%221%22%2C%0A++++quantity%3A+%222%22%3B%0A++++totalAmount%3A+%221500%22%2C%0A++++status%3A+%22PAid%22%0A%7D=
+
+<> 2026-06-16T192602.415.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 160
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+%7B%0A++++orderId+%3A+%221%22%2C%0A++++productId%3A+%221%22%2C%0A++++quantity%3A+%222%22%3B%0A++++totalAmount%3A+%221500%22%2C%0A++++status%3A+%22PAid%22%0A%7D=
+
+<> 2026-06-16T162830.415.json
+
+###
+
+POST http://localhost:9092/orders
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 160
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+%7B%0A++++orderId+%3A+%221%22%2C%0A++++productId%3A+%221%22%2C%0A++++quantity%3A+%222%22%3B%0A++++totalAmount%3A+%221500%22%2C%0A++++status%3A+%22PAid%22%0A%7D=
+
+<> 2026-06-16T152506.500.json
+
+###
+
+GET http://localhost:9090/products/1
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+<> 2026-06-15T202442.200.json
+
+###
+
+POST http://localhost:9090/products
+Content-Type: application/json
+Content-Length: 93
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "id" : "1",
+  "name" : "Shirt",
+  "category" : "Men",
+  "price" : "1223",
+  "stock" : 2
+}
+
+<> 2026-06-15T201855.200.json
+
+###
+
+POST http://localhost:9090/products
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2026.1.2
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2026-06-15T201833.400.json
+
+###
+

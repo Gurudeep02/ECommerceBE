@@ -1,0 +1,11 @@
+package com.ecommerce.analytics.dto;
+
+import lombok.Data;
+
+@Data
+public class OrderCreatedEvent {
+    private Long orderId;
+    private Long productId;
+    private Integer quantity;
+    private Double totalAmount;
+}
