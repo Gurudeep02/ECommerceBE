@@ -1,145 +1,90 @@
 pipeline {
-    agent any
+agent any
 
-    tools {
-        maven 'Maven3'
-        jdk 'JDK21'
-    }
+tools {
+    maven 'Maven3'
+    jdk 'JDK21'
+}
 
-    environment {
-        DOCKER_USER = 'gurudeep02'
-    }
+environment {
+    DOCKER_USER = 'gurudeep02'
+}
 
-    stages {
+stages {
 
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
+    stage('Checkout') {
+        steps {
+            checkout scm
         }
+    }
 
-        stage('Detect Changed Services') {
-            steps {
-                script {
+    stage('Detect Changed Services') {
+        steps {
+            script {
 
-                    def changedFiles = bat(
-                        script: '@git diff --name-only HEAD~1 HEAD',
-                        returnStdout: true
-                    ).trim()
+                def changedFiles = sh(
+                    script: 'git diff --name-only HEAD~1 HEAD || true',
+                    returnStdout: true
+                ).trim()
 
-                    echo "Changed Files:"
-                    echo changedFiles
+                echo "Changed Files:"
+                echo changedFiles
 
-                    def services = []
+                def services = []
 
-                    if (changedFiles.contains('api-gateway/')) {
-                        services.add('api-gateway')
-                    }
+                if (changedFiles.contains('api-gateway/')) {
+                    services.add('api-gateway')
+                }
 
-                    if (changedFiles.contains('order-service/')) {
-                        services.add('order-service')
-                    }
+                if (changedFiles.contains('order-service/')) {
+                    services.add('order-service')
+                }
 
-                    if (changedFiles.contains('product-service/')) {
-                        services.add('product-service')
-                    }
+                if (changedFiles.contains('product-service/')) {
+                    services.add('product-service')
+                }
 
-                    if (changedFiles.contains('inventory-service/')) {
-                        services.add('inventory-service')
-                    }
+                if (changedFiles.contains('inventory-service/')) {
+                    services.add('inventory-service')
+                }
 
-                    if (changedFiles.contains('notification-service/')) {
-                        services.add('notification-service')
-                    }
+                if (changedFiles.contains('notification-service/')) {
+                    services.add('notification-service')
+                }
 
-                    env.CHANGED_SERVICES = services.join(',')
+                env.CHANGED_SERVICES = services.join(',')
 
+                if (services.isEmpty()) {
+                    echo "No service changes detected."
+                } else {
                     echo "Services to build: ${env.CHANGED_SERVICES}"
                 }
             }
         }
+    }
 
-        stage('Build & Package') {
-            when {
-                expression { env.CHANGED_SERVICES?.trim() }
-            }
-            steps {
-                script {
-
-                    def services = env.CHANGED_SERVICES.split(',')
-
-                    for (service in services) {
-
-                        if (service.trim()) {
-
-                            dir(service) {
-
-                                bat 'mvn clean package -DskipTests'
-
-                                bat """
-                                docker build -t %DOCKER_USER%/${service}:latest .
-                                """
-                            }
-                        }
-                    }
-                }
+    stage('Build & Package') {
+        when {
+            expression {
+                env.CHANGED_SERVICES?.trim()
             }
         }
 
-        stage('Docker Login & Push') {
-            when {
-                expression { env.CHANGED_SERVICES?.trim() }
-            }
-            steps {
+        steps {
+            script {
 
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'dockerhub-creds',
-                        usernameVariable: 'DOCKER_USERNAME',
-                        passwordVariable: 'DOCKER_PASSWORD'
-                    )
-                ]) {
+                def services = env.CHANGED_SERVICES.split(',')
 
-                    script {
+                for (service in services) {
 
-                        bat '''
-                        echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin
-                        '''
+                    if (service.trim()) {
 
-                        def services = env.CHANGED_SERVICES.split(',')
+                        dir(service.trim()) {
 
-                        for (service in services) {
+                            sh 'mvn clean package -DskipTests'
 
-                            if (service.trim()) {
-
-                                bat """
-                                docker push %DOCKER_USER%/${service}:latest
-                                """
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Restart Containers') {
-            when {
-                expression { env.CHANGED_SERVICES?.trim() }
-            }
-            steps {
-
-                script {
-
-                    def services = env.CHANGED_SERVICES.split(',')
-
-                    for (service in services) {
-
-                        if (service.trim()) {
-
-                            bat """
-                            docker compose stop ${service}
-                            docker compose rm -f ${service}
-                            docker compose up -d ${service}
+                            sh """
+                                docker build -t ${DOCKER_USER}/${service}:latest .
                             """
                         }
                     }
@@ -148,13 +93,92 @@ pipeline {
         }
     }
 
-    post {
-        success {
-            echo 'Pipeline completed successfully'
+    stage('Docker Login') {
+        when {
+            expression {
+                env.CHANGED_SERVICES?.trim()
+            }
         }
 
-        failure {
-            echo 'Pipeline failed'
+        steps {
+
+            withCredentials([
+                usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USERNAME',
+                    passwordVariable: 'DOCKER_PASSWORD'
+                )
+            ]) {
+
+                sh '''
+                    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                '''
+            }
         }
+    }
+
+    stage('Push Images') {
+        when {
+            expression {
+                env.CHANGED_SERVICES?.trim()
+            }
+        }
+
+        steps {
+
+            script {
+
+                def services = env.CHANGED_SERVICES.split(',')
+
+                for (service in services) {
+
+                    if (service.trim()) {
+
+                        sh """
+                            docker push ${DOCKER_USER}/${service}:latest
+                        """
+                    }
+                }
+            }
+        }
+    }
+
+    stage('Restart Containers') {
+        when {
+            expression {
+                env.CHANGED_SERVICES?.trim()
+            }
+        }
+
+        steps {
+
+            script {
+
+                def services = env.CHANGED_SERVICES.split(',')
+
+                for (service in services) {
+
+                    if (service.trim()) {
+
+                        sh """
+                            docker compose stop ${service}
+                            docker compose rm -f ${service}
+                            docker compose up -d ${service}
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
+
+post {
+
+    success {
+        echo 'Pipeline completed successfully'
+    }
+
+    failure {
+        echo 'Pipeline failed'
     }
 }
