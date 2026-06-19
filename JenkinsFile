@@ -1,0 +1,151 @@
+pipeline {
+agent any
+
+```
+tools {
+    maven 'Maven3'
+    jdk 'JDK21'
+}
+
+environment {
+    DOCKER_USER = "gurudeep02"
+}
+
+stages {
+
+    stage('Checkout') {
+        steps {
+            checkout scm
+        }
+    }
+
+    stage('Detect Changes') {
+        steps {
+            script {
+
+                CHANGED_FILES = sh(
+                    script: "git diff --name-only HEAD~1 HEAD",
+                    returnStdout: true
+                ).trim()
+
+                echo "Changed Files:"
+                echo CHANGED_FILES
+
+                SERVICES = []
+
+                if (CHANGED_FILES.contains("api-gateway/")) {
+                    SERVICES.add("api-gateway")
+                }
+
+                if (CHANGED_FILES.contains("order-service/")) {
+                    SERVICES.add("order-service")
+                }
+
+                if (CHANGED_FILES.contains("product-service/")) {
+                    SERVICES.add("product-service")
+                }
+
+                if (CHANGED_FILES.contains("inventory-service/")) {
+                    SERVICES.add("inventory-service")
+                }
+
+                if (CHANGED_FILES.contains("notification-service/")) {
+                    SERVICES.add("notification-service")
+                }
+
+                env.CHANGED_SERVICES = SERVICES.join(",")
+            }
+        }
+    }
+
+    stage('Build Changed Services') {
+        steps {
+
+            script {
+
+                def services = env.CHANGED_SERVICES.split(",")
+
+                for(service in services) {
+
+                    if(service?.trim()) {
+
+                        dir(service) {
+
+                            sh "mvn clean package -DskipTests"
+
+                            sh """
+                            docker build \
+                            -t ${DOCKER_USER}/${service}:latest .
+                            """
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    stage('Push Images') {
+        steps {
+
+            withCredentials([
+                usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USERNAME',
+                    passwordVariable: 'DOCKER_PASSWORD'
+                )
+            ]) {
+
+                script {
+
+                    sh '''
+                    echo $DOCKER_PASSWORD | docker login \
+                    -u $DOCKER_USERNAME \
+                    --password-stdin
+                    '''
+
+                    def services =
+                        env.CHANGED_SERVICES.split(",")
+
+                    for(service in services) {
+
+                        if(service?.trim()) {
+
+                            sh """
+                            docker push \
+                            ${DOCKER_USER}/${service}:latest
+                            """
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    stage('Restart Containers') {
+
+        steps {
+
+            script {
+
+                def services =
+                    env.CHANGED_SERVICES.split(",")
+
+                for(service in services) {
+
+                    if(service?.trim()) {
+
+                        sh """
+                        docker compose stop ${service} || true
+                        docker compose rm -f ${service} || true
+                        docker compose up -d ${service}
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+}
