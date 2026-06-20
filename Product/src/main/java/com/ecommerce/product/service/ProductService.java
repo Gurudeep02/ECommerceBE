@@ -19,6 +19,8 @@ public class ProductService {
 
     public ProductResponseDTO saveProduct(ProductRequestDTO productRequestDTO){
         Product product = ProductMapper.toModel(productRequestDTO);
+        System.out.print(product.getStock()
+        );
         return ProductMapper.toDto(productRepository.save(product));
     }
 
