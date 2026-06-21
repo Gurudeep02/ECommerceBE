@@ -19,7 +19,7 @@ public class ProductService {
 
     public ProductResponseDTO saveProduct(ProductRequestDTO productRequestDTO){
         Product product = ProductMapper.toModel(productRequestDTO);
-        System.out.print(product.getCategory());
+        System.out.print(product.getName());
         return ProductMapper.toDto(productRepository.save(product));
     }
 

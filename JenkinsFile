@@ -96,9 +96,11 @@ stages {
 
                 services.each { service ->
 
-                    if (service.trim()) {
+                    service = service.trim()
 
-                        def folder = folderMap[service.trim()]
+                    if (service) {
+
+                        def folder = folderMap[service]
 
                         echo "Building ${service} from ${folder}"
 
@@ -165,7 +167,9 @@ stages {
 
                 services.each { service ->
 
-                    if (service.trim()) {
+                    service = service.trim()
+
+                    if (service) {
 
                         echo "Pushing ${service}"
 
@@ -185,7 +189,7 @@ stages {
         }
     }
 
-    stage('Restart Containers') {
+    stage('Deploy Containers') {
         when {
             expression {
                 return env.CHANGED_SERVICES?.trim()
@@ -195,25 +199,57 @@ stages {
         steps {
             script {
 
-                def services = env.CHANGED_SERVICES.split(',')
+                def servicePorts = [
+                    'product-service'      : '9090',
+                    'notification-service' : '9091',
+                    'order-service'        : '9093',
+                    'analytics-service'    : '9094'
+                    // 'authentication-service' : 'PORT'
+                ]
 
-                sh '''
-                    pwd
-                    ls -la
-                '''
+                def services = env.CHANGED_SERVICES.split(',')
 
                 services.each { service ->
 
-                    if (service.trim()) {
+                    service = service.trim()
 
-                        echo "Restarting ${service}"
+                    if (service) {
+
+                        echo "Deploying ${service}"
 
                         sh """
-                            docker compose stop ${service} || true
-                            docker compose rm -f ${service} || true
-                            docker compose pull ${service} || true
-                            docker compose up -d ${service}
+                            docker pull ${DOCKER_USER}/${service}:latest
+
+                            docker stop ${service} || true
+
+                            docker rm ${service} || true
                         """
+
+                        if (service == 'notification-service' || service == 'analytics-service') {
+
+                            sh """
+                                docker run -d \
+                                --name ${service} \
+                                --network ecommerce-network \
+                                --restart unless-stopped \
+                                --memory=512m \
+                                ${DOCKER_USER}/${service}:latest
+                            """
+                        }
+                        else {
+
+                            def port = servicePorts[service]
+
+                            sh """
+                                docker run -d \
+                                --name ${service} \
+                                --network ecommerce-network \
+                                -p ${port}:${port} \
+                                --restart unless-stopped \
+                                --memory=512m \
+                                ${DOCKER_USER}/${service}:latest
+                            """
+                        }
                     }
                 }
             }
