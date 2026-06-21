@@ -8,6 +8,7 @@ tools {
 
 environment {
     DOCKER_USER = 'gurudeep02'
+    DOCKER_BUILDKIT = '0'
 }
 
 stages {
@@ -15,6 +16,11 @@ stages {
     stage('Checkout') {
         steps {
             checkout scm
+
+            sh '''
+                git --version
+                docker --version
+            '''
         }
     }
 
@@ -23,7 +29,9 @@ stages {
             script {
 
                 def changedFiles = sh(
-                    script: 'git diff --name-only HEAD~1 HEAD || true',
+                    script: '''
+                        git diff --name-only HEAD~1 HEAD 2>/dev/null || git ls-tree -r HEAD --name-only
+                    ''',
                     returnStdout: true
                 ).trim()
 
@@ -54,7 +62,7 @@ stages {
                     services.add('analytics-service')
                 }
 
-                env.CHANGED_SERVICES = services.join(',')
+                env.CHANGED_SERVICES = services.unique().join(',')
 
                 echo "Detected Services: ${services}"
                 echo "CHANGED_SERVICES: ${env.CHANGED_SERVICES}"
@@ -99,8 +107,16 @@ stages {
                             sh 'mvn clean package -DskipTests'
 
                             sh """
+                                export DOCKER_BUILDKIT=0
+
                                 docker build \
+                                --no-cache \
                                 -t ${DOCKER_USER}/${service}:latest .
+                            """
+
+                            sh """
+                                docker image inspect \
+                                ${DOCKER_USER}/${service}:latest
                             """
                         }
                     }
@@ -153,10 +169,16 @@ stages {
 
                         echo "Pushing ${service}"
 
-                        sh """
-                            docker push \
-                            ${DOCKER_USER}/${service}:latest
-                        """
+                        retry(3) {
+
+                            sh """
+                                docker image inspect \
+                                ${DOCKER_USER}/${service}:latest
+
+                                docker push \
+                                ${DOCKER_USER}/${service}:latest
+                            """
+                        }
                     }
                 }
             }
@@ -175,6 +197,11 @@ stages {
 
                 def services = env.CHANGED_SERVICES.split(',')
 
+                sh '''
+                    pwd
+                    ls -la
+                '''
+
                 services.each { service ->
 
                     if (service.trim()) {
@@ -184,6 +211,7 @@ stages {
                         sh """
                             docker compose stop ${service} || true
                             docker compose rm -f ${service} || true
+                            docker compose pull ${service} || true
                             docker compose up -d ${service}
                         """
                     }
